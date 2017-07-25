@@ -3,7 +3,7 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const getRawBody = require('raw-body');
-const errors = require('mmp-errors');
+const errors = require('mm-errors');
 
 const rxForms = /^multipart\/(?:form-data|related)(?:;|$)/i;
 
