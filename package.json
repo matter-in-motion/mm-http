@@ -27,6 +27,6 @@
   "dependencies": {
     "express": "^4.15.3",
     "raw-body": "^2.2.0",
-    "mm-errors": "^0.8.0"
+    "mm-errors": "^1.0.0"
   }
 }
