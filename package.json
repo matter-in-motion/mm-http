@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/velocityzen/mm-http.git"
+    "url": "git+ssh://git@github.com/matter-in-motion/mm-http.git"
   },
   "keywords": [
     "mm",
@@ -21,9 +21,9 @@
   "author": "Alexey Novikov <v@2dubs.com> (http://2dubs.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/velocityzen/mm-http/issues"
+    "url": "https://github.com/matter-in-motion/mm-http/issues"
   },
-  "homepage": "https://github.com/velocityzen/mm-http#readme",
+  "homepage": "https://github.com/matter-in-motion/mm-http#readme",
   "dependencies": {
     "express": "^4.15.3",
     "raw-body": "^2.2.0",
