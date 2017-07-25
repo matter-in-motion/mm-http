@@ -1,0 +1,32 @@
+{
+  "name": "mm-http",
+  "version": "1.0.0",
+  "description": "Matter in motion http transport",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/velocityzen/mm-http.git"
+  },
+  "keywords": [
+    "mm",
+    "mmp",
+    "matter",
+    "motion",
+    "http",
+    "transport"
+  ],
+  "author": "Alexey Novikov <v@2dubs.com> (http://2dubs.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/velocityzen/mm-http/issues"
+  },
+  "homepage": "https://github.com/velocityzen/mm-http#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "raw-body": "^2.2.0",
+    "mm-errors": "^0.8.0"
+  }
+}
