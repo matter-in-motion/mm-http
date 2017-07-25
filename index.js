@@ -70,9 +70,9 @@ Transport.prototype.request = function(req, res) {
     msg.objectMode = true;
   }
 
-  const head = req.get('Authorization');
-  if (head) {
-    msg.head = head.split(' ')[1];
+  const meta = req.get('Authorization');
+  if (meta) {
+    msg.meta = meta.split(' ')[1];
   }
 
   if (req.method === 'OPTIONS') {
@@ -82,7 +82,7 @@ Transport.prototype.request = function(req, res) {
 
   if (req.method === 'GET') {
     msg.call = req.path.substr(1);
-    msg.request = req.query;
+    msg.request = req.query || null;
     return this.message(msg);
   }
 
