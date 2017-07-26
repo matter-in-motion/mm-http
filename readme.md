@@ -8,14 +8,29 @@ Http transport adds `root` property to the `app`. It is just an `express` instan
 
 ### Protocol
 
-To use all advantages of HTTP protocol request from the browser looks like this:
+To use all advantages of HTTP protocol:
+
+* __GET__
+  1. Add `call` in the URL after API URL
+  2. Add `body` as query string
+* __POST__
+  1. Add special `MM` header with call as JSON string
+  2. Send `body` as string, number, boolean, or JSON string in request body
+
+Put meta field in the standard `Authorization: Bearer` header.
+
+**HTTP request requires `Accept` and `Content-Type` headers to be set to `application/json`**
+
+The response will come as JSON string.
+
+From the browser looks like this:
 
 #### `GET` request:
 
 ```js
 const xhr = new XMLHttpRequest();
 xhr.open('GET', '/api/world.hello?name=John', true);
-xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+xhr.setRequestHeader('Authorization', 'Bearer ' + meta);
 xhr.setRequestHeader('Accept', 'application/json');
 xhr.send();
 xhr.onload = function() {
