@@ -1,5 +1,8 @@
 # Matter In Motion. HTTP transport
 
+[![NPM Version](https://img.shields.io/npm/v/mm-http.svg?style=flat-square)](https://www.npmjs.com/package/mm-http)
+[![NPM Downloads](https://img.shields.io/npm/dt/mm-http.svg?style=flat-square)](https://www.npmjs.com/package/mm-http)
+
 Http transport extension for [matter in motion](https://github.com/matter-in-motion/mm) framework
 
 ## Usage
