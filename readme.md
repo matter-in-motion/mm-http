@@ -6,7 +6,7 @@ Http transport extension for [matter in motion](https://github.com/matter-in-mot
 
 [Transport installation instructions](https://github.com/matter-in-motion/mm/blob/master/docs/transports.md)
 
-Http transport adds `root` property to the `app`. It is just an `express` instance. Also, you can use `app.use` method to add a contract or any other express-compatible handler
+_Http transport adds `root` property to the `app`. It is just an `express` instance. Also, you can use `app.use` method to add a contract or any other express-compatible handler_
 
 ### Protocol
 
