@@ -124,4 +124,6 @@ this.addViews({
 ```
 
 
-License: MIT.
+License: MIT
+
+© velocityzen
