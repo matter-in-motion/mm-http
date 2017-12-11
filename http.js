@@ -109,7 +109,6 @@ Http.prototype.request = function(req, res) {
 
 Http.prototype.response = function(msg) {
   const response = msg.connection;
-
   response
     .status(200)
     .type(msg.type);
