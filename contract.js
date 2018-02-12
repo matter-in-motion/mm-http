@@ -40,10 +40,7 @@ Contract.prototype.use = function(path, contract) {
 
 Contract.prototype.addView = function(path, viewName) {
   const view = this.units.require(viewName);
-  this.get(path, function(req, res) {
-    view.get(req, res);
-  });
-
+  this.get(path, (req, res) => view.get(req, res));
   return this;
 };
 

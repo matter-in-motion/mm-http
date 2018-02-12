@@ -49,7 +49,6 @@ Http.prototype.static = function(opts) {
 
 Http.prototype.request = function(req, res) {
   this.connect(req);
-
   let msg;
   try {
     let mm = req.get('MM');
