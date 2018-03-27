@@ -7,6 +7,23 @@ const errors = require('mm-errors');
 
 const rxForms = /^multipart\/(?:form-data|related)(?:;|$)/i;
 
+// use function will be added as use method in the app
+const use = function(path, contract) {
+  if (!contract) {
+    contract = path;
+    path = '/';
+  }
+
+  if (contract.handle) {
+    this.root.use(path, (req, res, next) => {
+      contract.handle(req, res, next)
+    });
+  } else {
+    this.root.use(path, contract);
+  }
+  return this;
+}
+
 const Http = function() {
   this.server = undefined;
   this.root = express();
@@ -18,24 +35,36 @@ Http.prototype.__initRequired = true;
 Http.prototype.__init = function(units) {
   this.root.set('env', process.env.NODE_ENV);
   const settings = units.require('core.settings');
-  const httpSettings = settings.http;
 
-  this.limit = httpSettings.limit || null;
-  this.encoding = httpSettings.encoding || 'utf8';
-  this.defaultType = httpSettings.type || 'application/json';
-  this.cors = httpSettings.cors;
-  this.port = httpSettings.port;
-  this.host = httpSettings.host;
-  this.backlog = httpSettings.backlog;
-  httpSettings.static && this.static(httpSettings.static);
+  const serializer = settings.http && settings.http.serializer ? settings.http.serializer : settings.serializers.default;
+  if (serializer) {
+    this.defaultSerializer = units.require(`serializers.${serializer}`);
+  }
 
   this.root.use(settings.core.api, (req, res) => this.request(req, res));
+  this.init(settings.http);
+  this.addHelpers(units.require('core.app'));
+};
 
-  if (httpSettings.tls) {
-    this.server = https.createServer(httpSettings.tls, this.root);
+Http.prototype.init = function(settings = {}) {
+  this.limit = settings.limit || null;
+  this.encoding = settings.encoding || 'utf8';
+  this.cors = settings.cors;
+  this.port = settings.port || 3000;
+  this.host = settings.host || '0.0.0.0';
+  this.backlog = settings.backlog;
+  settings.static && this.static(settings.static);
+
+  if (settings.tls) {
+    this.server = https.createServer(settings.tls, this.root);
   } else {
     this.server = http.createServer(this.root);
   }
+};
+
+Http.prototype.addHelpers = function(app) {
+  app.root = this.root;
+  app.use = use;
 };
 
 Http.prototype.start = function() {
@@ -49,6 +78,7 @@ Http.prototype.static = function(opts) {
 
 Http.prototype.request = function(req, res) {
   this.connect(req);
+
   let msg;
   try {
     let mm = req.get('MM');
@@ -57,14 +87,10 @@ Http.prototype.request = function(req, res) {
     msg = {}
   }
 
-  const type = req.get('Accept');
-  msg.type = type && type !== '*/*' ? type : this.defaultType;
-  msg.httpRequest = req;
+  const mime = req.get('Accept');
+  msg.mime = mime && mime !== '*/*' ? mime : this.defaultSerializer.mime;
+  msg.original = req;
   msg.connection = res;
-
-  if (msg.type === 'application/json') {
-    msg.objectMode = true;
-  }
 
   const meta = req.get('Authorization');
   if (meta) {
@@ -91,6 +117,10 @@ Http.prototype.request = function(req, res) {
     return this.message(msg);
   }
 
+  this.parseRequest(msg, req);
+};
+
+Http.prototype.parseRequest = function(msg, req) {
   getRawBody(req, {
     length: req.get('Content-Length'),
     limit: this.limit,
@@ -110,11 +140,11 @@ Http.prototype.response = function(msg) {
   const response = msg.connection;
   response
     .status(200)
-    .type(msg.type);
+    .type(msg.mime);
 
   if (this.cors) {
     response.set('Access-Control-Allow-Origin', this.cors.allowOrigin);
-    if (msg.httpRequest.method === 'OPTIONS') {
+    if (msg.original.method === 'OPTIONS') {
       response.set({
         'Access-Control-Allow-Methods': this.cors.allowMethods,
         'Access-Control-Allow-Headers': this.cors.allowHeaders,
