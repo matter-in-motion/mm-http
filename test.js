@@ -14,7 +14,7 @@ const app = createApp({
   serialiser: {
     default: 'json'
   }
-}, { auth: 'user', default: false });
+}, { default: false });
 
 
 test('checks the app', t => {

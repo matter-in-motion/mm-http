@@ -41,7 +41,7 @@ Http.prototype.__init = function(units) {
     this.defaultSerializer = units.require(`serializers.${serializer}`);
   }
 
-  this.root.use(settings.core.api, (req, res) => this.request(req, res));
+  this.root.use(settings.core.api.path, (req, res) => this.request(req, res));
   this.init(settings.http);
   this.addHelpers(units.require('core.app'));
 };

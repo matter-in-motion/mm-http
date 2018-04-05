@@ -27,13 +27,13 @@
   "dependencies": {
     "cookie": "^0.3.1",
     "express": "^4.15.3",
-    "mm-errors": "^1.0.0",
+    "mm-errors": "^2.0.0",
     "raw-body": "^2.2.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
     "nyc": "^11.6.0",
-    "mm-test": "^1.0.0",
+    "mm-test": "^3.0.0",
     "mm-serializer-json": "^1.0.0"
   }
 }
