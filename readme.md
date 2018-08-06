@@ -123,6 +123,24 @@ this.addViews({
 })
 ```
 
+### HTTP Methods
+
+All the standart http methods (check the `require('http').METHODS`), except `OPTIONS` can be used as methods for your resource. To do that, you need to use uppercase method name as an API call declaration. Example:
+
+```js
+  GET: function() {
+    return {
+      title: 'HTTP Test',
+      description: 'returns the get request data',
+      request: {},
+      response: {},
+      call: (auth, data) => data
+    }
+  }
+```
+
+And call it as `GET /api/resource`.
+
 
 License: MIT
 

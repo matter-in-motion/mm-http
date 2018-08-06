@@ -7,7 +7,15 @@ const errors = require('mm-errors');
 
 const rxForms = /^multipart\/(?:form-data|related)(?:;|$)/i;
 
-// use function will be added as use method in the app
+const getRequest = request => {
+  if (!Object.keys(request).length) {
+    return null;
+  }
+
+  return request;
+}
+
+// use function will be added as the app use method
 const use = function(path, contract) {
   if (!contract) {
     contract = path;
@@ -79,13 +87,7 @@ Http.prototype.static = function(opts) {
 Http.prototype.request = function(req, res) {
   this.connect(req);
 
-  let msg;
-  try {
-    let mm = req.get('MM');
-    msg = JSON.parse(mm);
-  } catch (e) {
-    msg = {}
-  }
+  const msg = this.parseCall(req);
 
   const mime = req.get('Accept');
   msg.mime = mime && mime !== '*/*' ? mime : this.defaultSerializer.mime;
@@ -97,14 +99,14 @@ Http.prototype.request = function(req, res) {
     msg.meta = meta.split(' ')[1];
   }
 
+
   if (req.method === 'OPTIONS') {
     msg.call = msg.call ? msg.call + '?' : '?';
     return this.message(msg);
   }
 
   if (req.method === 'GET') {
-    msg.call = req.path.substr(1);
-    msg.request = req.query || null;
+    msg.request = getRequest(req.query);
     return this.message(msg);
   }
 
@@ -118,6 +120,30 @@ Http.prototype.request = function(req, res) {
   }
 
   this.parseRequest(msg, req);
+};
+
+Http.prototype.parseCall = function(req) {
+  let msg;
+  try {
+    let mm = req.get('MM');
+    msg = JSON.parse(mm);
+  } catch (e) {
+    msg = {}
+  }
+
+  if (msg.call) {
+    return msg;
+  }
+
+  const pathParts = req.path.split('/');
+  const call = pathParts[1];
+
+  if (call.includes('.') || req.method === 'OPTIONS') {
+    msg.call = call;
+  } else {
+    msg.call = `${call}.${req.method}`;
+  }
+  return msg;
 };
 
 Http.prototype.parseRequest = function(msg, req) {
@@ -142,7 +168,7 @@ Http.prototype.response = function(msg) {
     .status(200)
     .type(msg.mime);
 
-  if (this.cors) {
+/*  if (this.cors) {
     response.set('Access-Control-Allow-Origin', this.cors.allowOrigin);
     if (msg.original.method === 'OPTIONS') {
       response.set({
@@ -151,7 +177,7 @@ Http.prototype.response = function(msg) {
         'Access-Control-Max-Age': this.cors.maxAge
       });
     }
-  }
+  }*/
 
   response.send(msg.response);
 };
