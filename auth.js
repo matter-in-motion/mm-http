@@ -8,9 +8,9 @@ module.exports = opts => (req, res, next) => {
   }
 
   opts.provider
-    .verify(req.cookies.meta)
-    .then(auth => {
-      req.body.meta = auth;
+    .verify(req.cookies.auth)
+    .then(meta => {
+      req.meta = meta;
       next();
     })
     .catch(err => {
