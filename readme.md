@@ -119,7 +119,7 @@ Adds all views from `obj`:
 ```js
 this.addViews({
   '/?': 'index',
-  '/contacts/?': 'contacts',
+  '/contacts/?': 'contacts'
 })
 ```
 
