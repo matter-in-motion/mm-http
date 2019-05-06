@@ -168,7 +168,7 @@ Http.prototype.response = function(msg) {
     .status(200)
     .type(msg.mime);
 
-/*  if (this.cors) {
+  if (this.cors) {
     response.set('Access-Control-Allow-Origin', this.cors.allowOrigin);
     if (msg.original.method === 'OPTIONS') {
       response.set({
@@ -177,7 +177,7 @@ Http.prototype.response = function(msg) {
         'Access-Control-Max-Age': this.cors.maxAge
       });
     }
-  }*/
+  }
 
   response.send(msg.response);
 };
